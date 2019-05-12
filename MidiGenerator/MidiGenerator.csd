@@ -586,19 +586,20 @@ endin
 instr 98
 kFreq = p4
 kFreq = kFreq - 12
-kVol = 0.1
+kVol = 0.3
+kEnv linen kVol, p3 * 0.1, p3, p3 * 0.1
 kFreq sylMtof kFreq
-aSignal vco2 kVol, kFreq
-aSignal lowpass2 aSignal, 400, 250
+aSignal vco2 kEnv, kFreq
+aSignal lowpass2 aSignal, 600, 1
 outs aSignal, aSignal
 endin
 
 instr 99
 kFreq = p4
-kVol = 0.3
+kVol = 0.8
 kFreq sylMtof kFreq
-kEnv linen kVol, p3 * 0.3, p3, p3 * 0.3
-aSignal oscil kVol, kFreq, 1
+kEnv linen kVol, p3 * 0.1, p3, p3 * 0.3
+aSignal oscil kEnv, kFreq, 1
 outs aSignal, aSignal
 endin
 
