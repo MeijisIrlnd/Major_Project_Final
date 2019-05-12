@@ -588,7 +588,8 @@ kFreq = p4
 kFreq = kFreq - 12
 kVol = 0.1
 kFreq sylMtof kFreq
-aSignal oscil kVol, kFreq, 1
+aSignal vco2 kVol, kFreq
+aSignal lowpass2 aSignal, 400, 250
 outs aSignal, aSignal
 endin
 
@@ -596,6 +597,7 @@ instr 99
 kFreq = p4
 kVol = 0.3
 kFreq sylMtof kFreq
+kEnv linen kVol, p3 * 0.3, p3, p3 * 0.3
 aSignal oscil kVol, kFreq, 1
 outs aSignal, aSignal
 endin
