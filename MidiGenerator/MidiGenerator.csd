@@ -38,6 +38,11 @@ button text("DAW Sync"), colour:0(222, 138, 15), colour:1(111, 138, 15), bounds(
 image file("./UI/WindowsField.jpg"), bounds(25, 80, 250, 130) , identchannel("standard"),
 image file("./UI/random.jpg"), bounds(25, 80, 250, 130), identchannel("true_random")
 image file("./UI/Rhys.jpg"), bounds(25, 80, 250, 130), identchannel("eldritch_horror")
+image file("./UI/Tentacle.png"), bounds(10, 290, 50, 80), alpha(0), identchannel("tent1")
+image file("./UI/Sigil.png"), bounds(180, 270, 200, 200), alpha(0)
+image file("./UI/Tentacle_2.png"), bounds(0, 50, 50, 80), alpha(0)
+;<a href="https://pngtree.com/">Graphics from pngtree.com</a>
+
 
 
 </Cabbage>
@@ -338,6 +343,14 @@ if((changed:k(chnget:k("keySelect")) == 1) || (changed:k(chnget:k("tonalitySelec
         chnset "bounds(-1000, 80, 250, 130),", "standard"
         chnset "bounds(-1000, 80, 250, 130),", "true_random"
         chnset "bounds(25, 80, 250, 130),", "eldritch_horror"
+        kExtra random 0, 3
+        kExtra = int(kExtra)
+        if(kExtra == 1) then
+            chnset "visible(1)", "tent1"
+        else
+            chnset "visible(0)", "tent1"
+        endif
+        
     
         gkNoteLenArray[0] = 4
         gkNoteLenArray[1] = 4
