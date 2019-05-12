@@ -3,12 +3,13 @@ form caption("MidiGen") size(300, 350), pluginid("def1"), colour("white")
 ;DEJANK::
 
 ; TODO: (Minor) Remove gkReady
-; TODOL (Minor) Tentacles
+; TODO: (Minor) Tentacles
 ; TODO: Store output files in a temp folder in documents as opposed to within the plugins folder
 ; TODO: Make instruments sound cooler than just fucking sine waves. 
 
 ; TODO: Tweak note arrays to make them nicer. To be honest, in your thesis, just say that the values are subject to further tweaks. 
 ; TODO: Fix Python exceptions
+; TODO: Limit chord note lengths or at least number of possible instances playing at once. Not sure how yet, maybe in Python! :)
 
 ;Key 
 combobox bounds(30, 40, 60, 20), items("A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab"), channel("keySelect"), colour(222, 138, 15)
@@ -42,7 +43,7 @@ image file("./UI/Rhys.jpg"), bounds(25, 80, 250, 130), identchannel("eldritch_ho
 </Cabbage>
 <CsoundSynthesizer>
 <CsOptions>
--n -d -+rtmidi=NULL -M0 -m0d 
+-n -d -+rtmidi=NULL -M0 -m0d -oGenerated.wav
 </CsOptions>
 <CsInstruments>
 ; Initialize the global variables. 
@@ -536,6 +537,7 @@ pyassign "n_length", kNoteLength
 pyassign "r_oo", kRest
 pyassign "c_oo", kGenerate
 pyassign "chord_length", kCLen
+
 pyrun{{
 writer.add_midi_note(100, rand_pitch, current_beat, n_length, r_oo, current_midi_len)
 root_no, third_no, fifth_no, dur_no = auto_chord.generate_chord(rand_pitch, chord_length)
@@ -577,7 +579,6 @@ kLine = 0
 kFlag = 0
 
 if((changed:k(chnget:k("preview")) == 1) && (chnget:k("preview") != 0)) then
-
 kEndTime readscore 0
 kChordEndTime readchordscore 0
 endif
@@ -586,28 +587,36 @@ endin
 instr 98
 kFreq = p4
 kFreq = kFreq - 12
-kVol = 0.3
+kVol = 0.05
 kEnv linen kVol, p3 * 0.1, p3, p3 * 0.1
 kFreq sylMtof kFreq
 aSignal vco2 kEnv, kFreq
-aSignal lowpass2 aSignal, 600, 1
+aSignal lowpass2 aSignal, 400, 1
 outs aSignal, aSignal
+gaSig1 = aSignal
 endin
 
 instr 99
 kFreq = p4
-kVol = 0.8
+kVol = 0.3
 kFreq sylMtof kFreq
-kEnv linen kVol, p3 * 0.1, p3, p3 * 0.3
+kEnv linen kVol, p3 * 0.3, p3, p3 * 0.3
 aSignal oscil kEnv, kFreq, 1
 outs aSignal, aSignal
+gaSig2 = aSignal
 endin
 
+instr mixer
+aSigL, aSigR monitor
+fout "TaraIsBeautiful.wav", 10, aSigL, aSigR
+endin
 </CsInstruments>
 <CsScore>
 f0 z
 f1 0 1024 10 1
 
+
 i"initialise" 0 [60*60*24*7]
+i"mixer" 0 20
 </CsScore>
 </CsoundSynthesizer>

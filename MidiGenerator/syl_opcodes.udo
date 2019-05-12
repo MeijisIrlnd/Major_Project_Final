@@ -159,7 +159,10 @@ Sscore strcatk Sscore, " "
 Sfreq floattostring kFreq
 Sscore strcatk Sscore, Sfreq
 Sscore strcatk Sscore, "\n"
-scoreline Sscore, 1
+k_Tara active 98 
+if(k_Tara < 3) then     
+    scoreline Sscore, 1
+endif
 Sscore strcpyk ""
 kCount = kCount + 1
 od
